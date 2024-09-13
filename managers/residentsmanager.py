@@ -13,7 +13,7 @@ class ResidentsManager:
             result = execute_query(residentsqueries.READ_BY_USERNAME, params, fetch='one')
             if result is None:
                 return False
-            elif self.username == result:
+            elif self.username in result:
                 return True
         except Exception as e:
             print(e)
@@ -24,10 +24,13 @@ class ResidentsManager:
             params = (self.username,)
             result = execute_query(residentsqueries.GET_PASSWORD_BY_USERNAME, params, fetch='one')
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
-            if hashed_password == result:
-                return True
-            else:
+            if result is None:
                 return False
+            else:
+                for passwords in result:
+                    print(passwords)
+                    if passwords == hashed_password:
+                        return True
         except Exception as e:
             print(e)
             return False

@@ -1,6 +1,6 @@
 import random
 import threading
-
+from for_print import error, enter, re_enter, success, prints, command
 from managers.emailmanager import EmailManager
 from managers.residentsmanager import ResidentsManager
 
@@ -34,31 +34,31 @@ def verify_password(email: str, verification_code: str):
 
 
 def resident_page(username):
-    print("Welcome to resident page!")
+    print(success + "Welcome to resident page!")
 
 
 def login_page():
-    username = input('Enter your username: ')
-    password = input('Enter your password: ')
+    username = input(enter + 'Enter your username: ')
+    password = input(enter + 'Enter your password: ')
     if not ResidentsManager(username).check_existence_by_username():
         if ResidentsManager(username).check_password(password):
-            pass
-    print('Username or password doesn\'t match')
+            resident_page(username)
+    print(error + 'Username or password doesn\'t match')
     auth_menu()
 
 
 def register_page():
-    full_name = input('Enter your full name: ')
-    email = input('Enter your email address: ')
+    full_name = input(enter + 'Enter your full name: ')
+    email = input(enter + 'Enter your email address: ')
     if check_email(email):
         verification_code = random.randint(10000, 99999)
         verification_code = str(verification_code)
         th1 = threading.Thread(target=verify_password, args=(email, verification_code,))
         th1.start()
         if check_code(verification_code):
-            print('Your code has been verified!')
-            username = input('Enter your username: ')
-            password = input('Enter your password: ')
+            print(success + 'Your code has been verified!')
+            username = input(enter + 'Enter your username: ')
+            password = input(enter + 'Enter your password: ')
             if not ResidentsManager(username).check_existence_by_username():
                 if ResidentsManager(username).create_resident(full_name, email, password):
                     resident_page(username)
@@ -76,7 +76,8 @@ def auth_menu() -> None:
     2. Register
     3. Logout
     """
-    user_input = input(text)
+    print(command + text)
+    user_input = input(enter + "Enter your choice: ")
     if user_input == "1":
         login_page()
     elif user_input == "2":
