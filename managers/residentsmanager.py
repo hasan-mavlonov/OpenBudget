@@ -11,9 +11,9 @@ class ResidentsManager:
         try:
             params = (self.username,)
             result = execute_query(residentsqueries.READ_BY_USERNAME, params, fetch='one')
-            if result in None:
+            if result is None:
                 return False
-            else:
+            elif self.username == result:
                 return True
         except Exception as e:
             print(e)
@@ -21,7 +21,7 @@ class ResidentsManager:
 
     def check_password(self, password):
         try:
-            params = (self.username, password)
+            params = (self.username,)
             result = execute_query(residentsqueries.GET_PASSWORD_BY_USERNAME, params, fetch='one')
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             if hashed_password == result:
@@ -32,6 +32,13 @@ class ResidentsManager:
             print(e)
             return False
 
-    def create_resident(self, full_name, gmail, password):
+    def create_resident(self, full_name, email, password):
         try:
-            params = (self.username, full_name, gmail, password)
+            hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            params = (self.username, full_name, email, hashed_password)
+            result = execute_query(residentsqueries.CREATE_RESIDENT, params, fetch='one')
+            print(result)
+            return True
+        except Exception as e:
+            print(e)
+            return False
