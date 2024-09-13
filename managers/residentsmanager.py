@@ -11,10 +11,11 @@ class ResidentsManager:
         try:
             params = (self.username,)
             result = execute_query(residentsqueries.READ_BY_USERNAME, params, fetch='one')
-            if result is None:
+            for row in result:
+                if self.username == row:
+                    return True
+            else:
                 return False
-            elif self.username in result:
-                return True
         except Exception as e:
             print(e)
             return False
@@ -28,7 +29,6 @@ class ResidentsManager:
                 return False
             else:
                 for passwords in result:
-                    print(passwords)
                     if passwords == hashed_password:
                         return True
         except Exception as e:
@@ -40,7 +40,59 @@ class ResidentsManager:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             params = (self.username, full_name, email, hashed_password)
             result = execute_query(residentsqueries.CREATE_RESIDENT, params, fetch='one')
-            print(result)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_resident_id(self):
+        try:
+            params = (self.username,)
+            result = execute_query(residentsqueries.GET_RESIDENT_ID, params, fetch='one')
+            for i in result:
+                return i
+            return False
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def get_resident_username(resident_id):
+        try:
+            params = (resident_id,)
+            result = execute_query(residentsqueries.GET_RESIDENT_USERNAME, params, fetch='one')
+            for i in result:
+                return i
+            return False
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_resident_data(self):
+        try:
+            params = (self.username,)
+            result = execute_query(residentsqueries.READ_BY_USERNAME, params, fetch='one')
+            print(f'Full name: {result[0]}')
+            print(f'Username: {result[1]}')
+            print(f'Email: {result[2]}')
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def update_resident(self, new_full_name, new_username, new_email):
+        try:
+            params = (new_full_name, new_username, new_email, self.username, )
+            result = execute_query(residentsqueries.EDIT_RESIDENT, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def delete_resident(self):
+        try:
+            params = (self.username, )
+            result = execute_query(residentsqueries.DELETE_RESIDENT, params)
             return True
         except Exception as e:
             print(e)
