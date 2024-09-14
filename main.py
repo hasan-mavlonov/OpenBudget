@@ -3,6 +3,9 @@ import threading
 from for_print import error, enter, re_enter, success, prints, command
 from managers.emailmanager import EmailManager
 from managers.residentsmanager import ResidentsManager
+from managers.regionsmanagers import RegionsManagers
+from managers.districtsmanagers import DistrictsManager
+from managers.requestsmanager import RequestsManager
 
 
 def check_email(email: str) -> bool:
@@ -65,19 +68,60 @@ def personal_page(username):
     resident_page(username)
 
 
+def request_page(username):
+    text = """
+1. Create a request
+2. See all requests
+3. Edit a request
+4. Delete a request  
+5. Exit  
+"""
+    print(command + text)
+    user_input = input(enter + 'Enter your choice: ')
+    if user_input == '1':
+        subject = input(enter + 'Enter your subject: ')
+        request = input(enter + 'Enter your request: ')
+        money_needed = int(input(enter + 'Enter money needed: '))
+        district_id = ResidentsManager(username).get_district_id()
+        owner_id = ResidentsManager(username).get_resident_id()
+        RequestsManager().create_request(owner_id, district_id, subject, request, money_needed)
+        print(success + 'Successfully created!')
+        request_page(username)
+    elif user_input == '2':
+        RequestsManager().get_all_requests()
+    elif user_input == '3':
+        new_subject = input(enter + "Enter your new subject: ")
+        new_request = input(enter + "Enter your new request: ")
+        new_money_needed = int(input(enter + "Enter money needed: "))
+        owner_id = ResidentsManager(username).get_resident_id()
+        district_id = ResidentsManager(username).get_district_id()
+        RequestsManager().edit_requests(new_subject, new_request, new_money_needed, owner_id, district_id)
+        print(success + "Successfully edited!")
+    elif user_input == '4':
+        owner_id = ResidentsManager(username).get_resident_id()
+        RequestsManager().get_my_requests(owner_id)
+        request_id = input(enter + 'Enter the id of a request you want to delete: ')
+        if RequestsManager().delete_request(owner_id):
+            print(success + 'Successfully deleted!')
+    elif user_input == '5':
+        resident_page(username)
+
+
 def resident_page(username):
     print(success + "Successfully logged in!")
     text = """
 1. Personal Cabinet.
 2. Requests page.
-3. 
+3. Logout
     """
     print(command + text)
     user_input = input(enter + "Choose an option: ")
     if user_input == '1':
         personal_page(username)
     elif user_input == '2':
-        pass
+        request_page(username)
+    elif user_input == '3':
+        auth_menu()
 
 
 def login_page():
@@ -91,6 +135,10 @@ def login_page():
 
 
 def register_page():
+    RegionsManagers().print_all_regions()
+    region_id = input(enter + "Enter region id: ")
+    DistrictsManager().get_all_districts(region_id)
+    district_id = input(enter + "Enter district id: ")
     full_name = input(enter + 'Enter your full name: ')
     email = input(enter + 'Enter your email address: ')
     if check_email(email):
@@ -103,7 +151,7 @@ def register_page():
             username = input(enter + 'Enter your username: ')
             password = input(enter + 'Enter your password: ')
             if not ResidentsManager(username).check_existence_by_username():
-                if ResidentsManager(username).create_resident(full_name, email, password):
+                if ResidentsManager(username).create_resident(full_name, district_id, email, password):
                     resident_page(username)
         else:
             print('Try again!')

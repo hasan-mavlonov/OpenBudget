@@ -10,8 +10,8 @@ SELECT password FROM residents WHERE username = %s
 """
 
 CREATE_RESIDENT = """
-INSERT INTO residents (username, full_name, email, password)
-VALUES (%s, %s, %s, %s)
+INSERT INTO residents (username, full_name, district_id, email, password)
+VALUES (%s, %s, %s, %s, %s)
 RETURNING id
 """
 GET_RESIDENT_ID = """
@@ -28,4 +28,8 @@ WHERE username = %s
 
 DELETE_RESIDENT = """
 DELETE FROM residents WHERE username = %s
+"""
+
+GET_DISTRICT_ID = """
+SELECT district_id FROM residents WHERE username = %s
 """

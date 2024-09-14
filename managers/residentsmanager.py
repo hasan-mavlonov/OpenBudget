@@ -35,10 +35,10 @@ class ResidentsManager:
             print(e)
             return False
 
-    def create_resident(self, full_name, email, password):
+    def create_resident(self, full_name, district_id, email, password):
         try:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
-            params = (self.username, full_name, email, hashed_password)
+            params = (self.username, full_name, district_id, email, hashed_password)
             result = execute_query(residentsqueries.CREATE_RESIDENT, params, fetch='one')
             return True
         except Exception as e:
@@ -94,6 +94,17 @@ class ResidentsManager:
             params = (self.username, )
             result = execute_query(residentsqueries.DELETE_RESIDENT, params)
             return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_district_id(self):
+        try:
+            params = (self.username,)
+            result = execute_query(residentsqueries.GET_DISTRICT_ID, params, fetch='one')
+            for i in result:
+                return i
+            return False
         except Exception as e:
             print(e)
             return False
