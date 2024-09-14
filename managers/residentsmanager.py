@@ -108,3 +108,29 @@ class ResidentsManager:
         except Exception as e:
             print(e)
             return False
+    @staticmethod
+    def see_all_residents():
+        try:
+            result = execute_query(residentsqueries.SEE_ALL_RESIDENTS, fetch='all')
+            for i in result:
+                print(f'ID: {i[0]}\n'
+                      f'Full name: {i[1]}\n'
+                      f'Email: {i[2]}\n\n')
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    @staticmethod
+    def print_by_district(district_id):
+        try:
+            param = (district_id,)
+            result = execute_query(residentsqueries.SEE_RESIDENTS_BY_DISTRICT, param, fetch='all')
+            for i in result:
+                print(f'ID: {i[0]}\n'
+                      f'Full name: {i[1]}\n'
+                      f'Email: {i[2]}\n\n')
+            return True
+        except Exception as e:
+            print(e)
+            return False
+

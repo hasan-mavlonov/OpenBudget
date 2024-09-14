@@ -1,3 +1,5 @@
+# admin username and password == 'admin'
+
 import random
 import threading
 from for_print import error, enter, re_enter, success, prints, command
@@ -133,11 +135,72 @@ def resident_page(username):
     elif user_input == '3':
         auth_menu()
 
+def who_lives_where():
+
+def resident_management():
+    text = """
+1. See residents by location
+2. Edit a resident
+3. Delete a resident
+4. Exit
+"""
+    print(command + text)
+    user_input = input(enter + "Choose an option: ")
+    if user_input == '1':
+        RegionsManagers().print_all_regions()
+        region_id = input(enter + "Enter region id: ")
+        DistrictsManager().get_all_districts(region_id)
+        district_id = input(enter + "Enter district id: ")
+        ResidentsManager.print_by_district(district_id)
+    elif user_input == '2':
+        ResidentsManager.see_all_residents()
+        resident_id = input(enter + 'Enter the resident id: ')
+        username = ResidentsManager.get_resident_username(resident_id)
+        new_full_name = input(enter + "Enter your new full name: ")
+        new_username = input(enter + "Enter your new username: ")
+        new_email = input(enter + "Enter your new email: ")
+        if check_email(new_email):
+            verification_code = random.randint(10000, 99999)
+            verification_code = str(verification_code)
+            th1 = threading.Thread(target=verify_password, args=(new_email, verification_code,))
+            th1.start()
+            if check_code(verification_code):
+                if ResidentsManager(username).update_resident(new_full_name, new_username, new_email):
+                    print(success + 'Successfully updated!')
+                    resident_management()
+    elif user_input == '3':
+        ResidentsManager.see_all_residents()
+        resident_id = input(enter + 'Enter the resident id: ')
+        username = ResidentsManager.get_resident_username(resident_id)
+        if ResidentsManager(username).delete_resident():
+            print(success + "Successfully deleted!")
+            resident_management()
+    elif user_input == '4':
+        admin_page()
+    else:
+        print(error + 'Invalid input. Try again!')
+        resident_management()
+
+def admin_page():
+    text = """
+1. Resident Management
+2. Request Management
+3. Location Management
+4. Statistics
+5. Logout
+"""
+    print(command + text)
+    user_input = input(enter + "Choose an option: ")
+    if user_input == '1':
+        resident_management()
+
 
 def login_page():
     username = input(enter + 'Enter your username: ')
     password = input(enter + 'Enter your password: ')
-    if ResidentsManager(username).check_existence_by_username():
+    if username == 'admin' and password == 'admin':
+        admin_page()
+    elif ResidentsManager(username).check_existence_by_username():
         if ResidentsManager(username).check_password(password):
             resident_page(username)
     else:

@@ -33,3 +33,9 @@ DELETE FROM residents WHERE username = %s
 GET_DISTRICT_ID = """
 SELECT district_id FROM residents WHERE username = %s
 """
+SEE_ALL_RESIDENTS = """
+SELECT id, full_name, email FROM residents 
+"""
+SEE_RESIDENTS_BY_DISTRICT = """
+SELECT id, full_name, email FROM residents WHERE district_id = %s
+"""
