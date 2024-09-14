@@ -135,7 +135,6 @@ def resident_page(username):
     elif user_input == '3':
         auth_menu()
 
-def who_lives_where():
 
 def resident_management():
     text = """
@@ -181,6 +180,62 @@ def resident_management():
         print(error + 'Invalid input. Try again!')
         resident_management()
 
+
+def request_management():
+    text = """
+1. Approve/Deny a request
+2. See approved requests
+3. See denied requests
+"""
+    print(command + text)
+    user_input = input(enter + "Choose an option: ")
+    if user_input == '1':
+        RequestsManager().get_null_requests()
+        request_id = input(enter + "Enter request ID to manage: ")
+        response = input(enter + "Approve or Deny a request? A/D: ")
+        if response == 'A':
+            if RequestsManager().approve_request(request_id):
+                print(success + "Request Approved")
+            else:
+                print(error + "Error")
+                request_management()
+        elif response == 'D':
+            if RequestsManager().deny_request(request_id):
+                print(success + "Request Denied")
+            else:
+                print(error + "Error")
+        else:
+            print(error + 'Invalid input. Try again!')
+    elif user_input == '2':
+        RequestsManager().see_approved_requests()
+        input(enter + "Press enter to continue...")
+    elif user_input == '3':
+        RequestsManager().see_denied_requests()
+        input(enter + "Press enter to continue...")
+    request_management()
+
+def location_management():
+    text = """
+1. See all regions
+2. See all districts
+3. Add a region
+4. Add a district
+"""
+    print(command + text)
+    user_input = input(enter + "Choose an option: ")
+    if user_input == '1':
+        RegionsManagers().print_all_regions()
+    elif user_input == '2':
+        region_id = input(enter + "Enter region id: ")
+        DistrictsManager().get_all_districts(region_id)
+    elif user_input == '3':
+        region_name = input(enter + "Enter region name: ")
+        if RegionsManagers().add_region(region_name):
+            print(success + "Successfully added a region!")
+    elif user_input == '4':
+        RegionsManagers().print_all_regions()
+        region_id = int(input(enter + "Enter region id: "))
+
 def admin_page():
     text = """
 1. Resident Management
@@ -193,7 +248,11 @@ def admin_page():
     user_input = input(enter + "Choose an option: ")
     if user_input == '1':
         resident_management()
-
+    elif user_input == '2':
+        request_management()
+    elif user_input == '3':
+        location_management()
+    elif user_input ==
 
 def login_page():
     username = input(enter + 'Enter your username: ')

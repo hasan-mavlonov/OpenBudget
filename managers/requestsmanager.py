@@ -33,9 +33,10 @@ class RequestsManager:
         except Exception as e:
             return False
 
-    def get_my_requests(self, owner_id):
+    @staticmethod
+    def get_my_requests(owner_id):
         try:
-            params = (owner_id, )
+            params = (owner_id,)
             result = execute_query(requestsqueries.GET_MY_REQUESTS, params, fetch="all")
             for request in result:
                 print(f"ID: {request[0]}\n"
@@ -47,12 +48,73 @@ class RequestsManager:
             print(e)
             return False
 
-    def delete_request(self, request_id):
+    @staticmethod
+    def delete_request(request_id):
         try:
-            params = (request_id, )
+            params = (request_id,)
             result = execute_query(requestsqueries.DELETE_REQUEST, params)
             return True
         except Exception as e:
             print(e)
             return False
 
+    @staticmethod
+    def get_null_requests():
+        try:
+            result = execute_query(requestsqueries.GET_NULL_REQUESTS, fetch="all")
+            for request in result:
+                print(f"ID: {request[0]}\n"
+                      f"Subject: {request[1]}\n"
+                      f"Request: {request[2]}\n"
+                      f"Money needed: {request[3]}\n\n")
+            return True
+        except Exception as e:
+            return False
+
+    @staticmethod
+    def approve_request(request_id):
+        try:
+            params = (request_id,)
+            result = execute_query(requestsqueries.APPROVE_REQUEST, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def deny_request( request_id):
+        try:
+            params = (request_id,)
+            result = execute_query(requestsqueries.DENY_REQUEST, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def see_approved_requests():
+        try:
+            result = execute_query(requestsqueries.GET_APPROVED_REQUESTS, fetch="all")
+            for request in result:
+                print(f"ID: {request[0]}\n"
+                      f"Subject: {request[1]}\n"
+                      f"Request: {request[2]}\n"
+                      f"Money needed: {request[3]}\n\n")
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def see_denied_requests():
+        try:
+            result = execute_query(requestsqueries.GET_DENIED_REQUESTS, fetch="all")
+            for request in result:
+                print(f"ID: {request[0]}\n"
+                      f"Subject: {request[1]}\n"
+                      f"Request: {request[2]}\n"
+                      f"Money needed: {request[3]}\n\n")
+            return True
+        except Exception as e:
+            print(e)
+            return False

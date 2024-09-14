@@ -13,3 +13,12 @@ class RegionsManagers:
         except Exception as e:
             print(e)
             return False
+
+    def add_region(self, region_name):
+        try:
+            params = (region_name)
+            execute_query(regionsqueries.ADD_REGION, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False

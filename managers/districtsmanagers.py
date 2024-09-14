@@ -13,3 +13,12 @@ class DistrictsManager:
         except Exception as e:
             print(e)
             return False
+
+    def add_district(self, region_id, district_name):
+        try:
+            params = (region_id, district_name, )
+            execute_query(districtsqueries.ADD_DISTRICT, params)
+            return True
+        except Exception as e:
+            print(e)
+            return False
