@@ -41,6 +41,7 @@ def personal_page(username):
 1. Read my data
 2. Update my data
 3. Delete my account
+4. Exit
 """
     print(command + text)
     user_input = input(enter + 'Enter your choice: ')
@@ -65,7 +66,11 @@ def personal_page(username):
         if ResidentsManager(username).delete_resident():
             print(success + "Successfully deleted!")
             auth_menu()
-    resident_page(username)
+    elif user_input == '4':
+        resident_page(username)
+    else:
+        print(error + 'Invalid input. Try again!')
+        personal_page(username)
 
 
 def request_page(username):
@@ -89,20 +94,25 @@ def request_page(username):
         request_page(username)
     elif user_input == '2':
         RequestsManager().get_all_requests()
+        input(enter + "Press enter to continue: ")
+        request_page(username)
     elif user_input == '3':
+        owner_id = ResidentsManager(username).get_resident_id()
+        RequestsManager().get_my_requests(owner_id)
+        request_id = input(enter + 'Enter the id of a request you want to delete: ')
         new_subject = input(enter + "Enter your new subject: ")
         new_request = input(enter + "Enter your new request: ")
         new_money_needed = int(input(enter + "Enter money needed: "))
-        owner_id = ResidentsManager(username).get_resident_id()
-        district_id = ResidentsManager(username).get_district_id()
-        RequestsManager().edit_requests(new_subject, new_request, new_money_needed, owner_id, district_id)
+        RequestsManager().edit_requests(new_subject, new_request, new_money_needed, request_id)
         print(success + "Successfully edited!")
+        resident_page(username)
     elif user_input == '4':
         owner_id = ResidentsManager(username).get_resident_id()
         RequestsManager().get_my_requests(owner_id)
         request_id = input(enter + 'Enter the id of a request you want to delete: ')
-        if RequestsManager().delete_request(owner_id):
+        if RequestsManager().delete_request(request_id):
             print(success + 'Successfully deleted!')
+            resident_page(username)
     elif user_input == '5':
         resident_page(username)
 
@@ -130,7 +140,8 @@ def login_page():
     if ResidentsManager(username).check_existence_by_username():
         if ResidentsManager(username).check_password(password):
             resident_page(username)
-    print(error + 'Username or password doesn\'t match')
+    else:
+        print(error + 'Username or password doesn\'t match')
     auth_menu()
 
 
@@ -164,7 +175,7 @@ def auth_menu() -> None:
     text = """
     1. Login
     2. Register
-    3. Logout
+    3. Exit
     """
     print(command + text)
     user_input = input(enter + "Enter your choice: ")
@@ -173,7 +184,7 @@ def auth_menu() -> None:
     elif user_input == "2":
         register_page()
     elif user_input == "3":
-        pass
+        exit()
 
 
 if __name__ == "__main__":

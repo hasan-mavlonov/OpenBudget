@@ -25,9 +25,9 @@ class RequestsManager:
         except Exception as e:
             return False
 
-    def edit_requests(self, new_subject, new_request, new_money_needed, owner_id, district_id):
+    def edit_requests(self, new_subject, new_request, new_money_needed, request_id):
         try:
-            params = (new_subject, new_request, new_money_needed, owner_id, district_id, )
+            params = (new_subject, new_request, new_money_needed, request_id)
             execute_query(requestsqueries.EDIT_REQUEST, params)
             return True
         except Exception as e:
@@ -47,9 +47,9 @@ class RequestsManager:
             print(e)
             return False
 
-    def delete_request(self, owner_id):
+    def delete_request(self, request_id):
         try:
-            params = (owner_id, )
+            params = (request_id, )
             result = execute_query(requestsqueries.DELETE_REQUEST, params)
             return True
         except Exception as e:

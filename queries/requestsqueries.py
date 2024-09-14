@@ -9,7 +9,7 @@ SELECT id, district_id, subject, request, money_needed FROM requests
 
 EDIT_REQUEST = """
 UPDATE requests SET subject = %s, request = %s, money_needed = %s 
-WHERE owner_id = %s and district_id = %s
+WHERE id = %s
 """
 
 GET_MY_REQUESTS = """
