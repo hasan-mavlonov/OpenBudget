@@ -118,7 +118,6 @@ def request_page(username: str):
 
 
 def resident_page(username: str):
-    print(success + "Successfully logged in!")
     text = """
 1. Personal Cabinet.
 2. Requests page.
@@ -340,12 +339,12 @@ def register_page():
             password = input(enter + 'Enter your password: ')
             if not ResidentsManager(username).check_existence_by_username():
                 if ResidentsManager(username).create_resident(full_name, district_id, email, password):
-                    resident_page(username)
+                    print(success + "Successfully registered!")
+                    auth_menu()
         else:
             print('Try again!')
     else:
         print('Invalid email!')
-    auth_menu()
 
 
 def auth_menu():
