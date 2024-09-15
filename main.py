@@ -72,7 +72,7 @@ def personal_page(username):
         resident_page(username)
     else:
         print(error + 'Invalid input. Try again!')
-        personal_page(username)
+    personal_page(username)
 
 
 def request_page(username):
@@ -166,19 +166,17 @@ def resident_management():
             if check_code(verification_code):
                 if ResidentsManager(username).update_resident(new_full_name, new_username, new_email):
                     print(success + 'Successfully updated!')
-                    resident_management()
     elif user_input == '3':
         ResidentsManager.see_all_residents()
         resident_id = input(enter + 'Enter the resident id: ')
         username = ResidentsManager.get_resident_username(resident_id)
         if ResidentsManager(username).delete_resident():
             print(success + "Successfully deleted!")
-            resident_management()
     elif user_input == '4':
         admin_page()
     else:
         print(error + 'Invalid input. Try again!')
-        resident_management()
+    resident_management()
 
 
 def request_management():
@@ -186,6 +184,7 @@ def request_management():
 1. Approve/Deny a request
 2. See approved requests
 3. See denied requests
+4. Exit
 """
     print(command + text)
     user_input = input(enter + "Choose an option: ")
@@ -212,7 +211,12 @@ def request_management():
     elif user_input == '3':
         RequestsManager().see_denied_requests()
         input(enter + "Press enter to continue...")
+    elif user_input == '4':
+        admin_page()
+    else:
+        print("Invalid input. Try again!")
     request_management()
+
 
 def location_management():
     text = """
@@ -220,12 +224,15 @@ def location_management():
 2. See all districts
 3. Add a region
 4. Add a district
+5. Exit
 """
     print(command + text)
     user_input = input(enter + "Choose an option: ")
     if user_input == '1':
         RegionsManagers().print_all_regions()
+        input("Press enter to continue...")
     elif user_input == '2':
+        RegionsManagers().print_all_regions()
         region_id = input(enter + "Enter region id: ")
         DistrictsManager().get_all_districts(region_id)
     elif user_input == '3':
@@ -235,6 +242,49 @@ def location_management():
     elif user_input == '4':
         RegionsManagers().print_all_regions()
         region_id = int(input(enter + "Enter region id: "))
+        DistrictsManager().get_all_districts(region_id)
+        district_name = input(enter + "Enter the district name: ")
+        if DistrictsManager().add_district(region_id, district_name):
+            print(success + "Successfully added a district!")
+    elif user_input == '5':
+        admin_page()
+    else:
+        print("Invalid input. Try again!")
+    location_management()
+
+
+def statistics():
+    text = """
+1. Total money requested
+2. Average money requested per request
+3. Requests grouped by district
+4. Requests grouped by region
+5. Top 5 highest money requests
+6. Exit
+    """
+    print(command + text)
+    user_input = input(enter + "Choose an option: ")
+    if user_input == '1':
+        RequestsManager().get_total_money_requested()
+        input("Press enter to continue...")
+    elif user_input == '2':
+        RequestsManager().get_avg_money_requested()
+        input("Press enter to continue...")
+    elif user_input == '3':
+        RequestsManager().requests_by_district_id()
+        input("Press enter to continue...")
+    elif user_input == '4':
+        RequestsManager().requests_by_region_id()
+        input("Press enter to continue...")
+    elif user_input == '5':
+        RequestsManager().top5_high_money_requests()
+        input("Press enter to continue...")
+    elif user_input == '6':
+        admin_page()
+    else:
+        print(error + "Invalid input. Try again!")
+    statistics()
+
 
 def admin_page():
     text = """
@@ -252,7 +302,14 @@ def admin_page():
         request_management()
     elif user_input == '3':
         location_management()
-    elif user_input ==
+    elif user_input == '4':
+        statistics()
+    elif user_input == '5':
+        auth_menu()
+    else:
+        print("Invalid input. Try again!")
+    admin_page()
+
 
 def login_page():
     username = input(enter + 'Enter your username: ')

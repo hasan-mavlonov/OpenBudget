@@ -82,7 +82,7 @@ class RequestsManager:
             return False
 
     @staticmethod
-    def deny_request( request_id):
+    def deny_request(request_id):
         try:
             params = (request_id,)
             result = execute_query(requestsqueries.DENY_REQUEST, params)
@@ -114,6 +114,59 @@ class RequestsManager:
                       f"Subject: {request[1]}\n"
                       f"Request: {request[2]}\n"
                       f"Money needed: {request[3]}\n\n")
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def get_total_money_requested():
+        try:
+            result = execute_query(requestsqueries.GET_MONEY_REQUESTED, fetch="one")
+            for request in result:
+                print(f"{request}$")
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def get_avg_money_requested():
+        try:
+            result = execute_query(requestsqueries.AVERAGE_MONEY_REQUESTED, fetch="one")
+            for request in result:
+                print(f"{request}$")
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    @staticmethod
+    def requests_by_district_id():
+        try:
+            result = execute_query(requestsqueries.REQUESTS_BY_DISTRICT,fetch="all")
+            for request in result:
+                print(request)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    @staticmethod
+    def requests_by_region_id():
+        try:
+            result = execute_query(requestsqueries.REQUESTS_BY_REGION, fetch="all")
+            for request in result:
+                print(request)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    @staticmethod
+    def top5_high_money_requests():
+        try:
+            result = execute_query(requestsqueries.TOP5_HIGH_MONEY_REQUESTS, fetch="all")
+            for request in result:
+                print(request)
             return True
         except Exception as e:
             print(e)
