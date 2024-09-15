@@ -24,7 +24,6 @@ GET_NULL_REQUESTS = """
 SELECT id, subject, request, money_needed FROM requests where is_approved IS NULL
 """
 
-
 APPROVE_REQUEST = """
 UPDATE requests SET is_approved = TRUE WHERE id = %s
 """

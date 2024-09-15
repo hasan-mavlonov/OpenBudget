@@ -1,8 +1,7 @@
 # admin username and password == 'admin'
-
 import random
 import threading
-from for_print import error, enter, re_enter, success, prints, command
+from for_print import error, enter, success, command
 from managers.emailmanager import EmailManager
 from managers.residentsmanager import ResidentsManager
 from managers.regionsmanagers import RegionsManagers
@@ -12,7 +11,7 @@ from managers.requestsmanager import RequestsManager
 
 def check_email(email: str) -> bool:
     # checks if the email is valid
-    if 'mail.com' in email:
+    if '@' in email:
         return True
     else:
         return False
@@ -38,7 +37,7 @@ def verify_password(email: str, verification_code: str):
         return True
 
 
-def personal_page(username):
+def personal_page(username: str):
     text = """
 1. Read my data
 2. Update my data
@@ -48,7 +47,6 @@ def personal_page(username):
     print(command + text)
     user_input = input(enter + 'Enter your choice: ')
     if user_input == '1':
-        print('Hello!')
         ResidentsManager(username).get_resident_data()
     elif user_input == '2':
         new_full_name = input(enter + "Enter your new full name: ")
@@ -75,7 +73,7 @@ def personal_page(username):
     personal_page(username)
 
 
-def request_page(username):
+def request_page(username: str):
     text = """
 1. Create a request
 2. See all requests
@@ -119,7 +117,7 @@ def request_page(username):
         resident_page(username)
 
 
-def resident_page(username):
+def resident_page(username: str):
     print(success + "Successfully logged in!")
     text = """
 1. Personal Cabinet.
@@ -350,7 +348,7 @@ def register_page():
     auth_menu()
 
 
-def auth_menu() -> None:
+def auth_menu():
     text = """
     1. Login
     2. Register

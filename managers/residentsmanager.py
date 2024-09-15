@@ -39,7 +39,7 @@ class ResidentsManager:
         try:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
             params = (self.username, full_name, district_id, email, hashed_password)
-            result = execute_query(residentsqueries.CREATE_RESIDENT, params, fetch='one')
+            execute_query(residentsqueries.CREATE_RESIDENT, params, fetch='one')
             return True
         except Exception as e:
             print(e)
@@ -82,8 +82,8 @@ class ResidentsManager:
 
     def update_resident(self, new_full_name, new_username, new_email):
         try:
-            params = (new_full_name, new_username, new_email, self.username, )
-            result = execute_query(residentsqueries.EDIT_RESIDENT, params)
+            params = (new_full_name, new_username, new_email, self.username,)
+            execute_query(residentsqueries.EDIT_RESIDENT, params)
             return True
         except Exception as e:
             print(e)
@@ -91,8 +91,8 @@ class ResidentsManager:
 
     def delete_resident(self):
         try:
-            params = (self.username, )
-            result = execute_query(residentsqueries.DELETE_RESIDENT, params)
+            params = (self.username,)
+            execute_query(residentsqueries.DELETE_RESIDENT, params)
             return True
         except Exception as e:
             print(e)
@@ -108,6 +108,7 @@ class ResidentsManager:
         except Exception as e:
             print(e)
             return False
+
     @staticmethod
     def see_all_residents():
         try:
@@ -120,6 +121,7 @@ class ResidentsManager:
         except Exception as e:
             print(e)
             return False
+
     @staticmethod
     def print_by_district(district_id):
         try:
@@ -133,4 +135,3 @@ class ResidentsManager:
         except Exception as e:
             print(e)
             return False
-
